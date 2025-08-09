@@ -8,12 +8,12 @@ import logging
 load_dotenv()
 logging.basicConfig(level=logging.INFO)
 
-from agent import root_agent
+from .agent import root_agent
 from google.adk.sessions import InMemorySessionService
 from google.adk.runners import Runner
 from google.adk.agents.run_config import RunConfig, StreamingMode
 from google.genai.types import Content, Part
-from state import TEST_USER_ID
+from .state import TEST_USER_ID
 
 app = FastAPI()
 app.add_middleware(
