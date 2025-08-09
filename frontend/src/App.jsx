@@ -2,10 +2,9 @@ import { useState } from 'react';
 import './App.css';
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import BarLoader from "./components/BarLoader.jsx";
 
 function App() {
-  const [isForging, setIsForging] = useState(false);
-  const [result, setResult] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [userQuery, setUserQuery] = useState('');
   const [aiResponse, setAiResponse] = useState('');
@@ -17,6 +16,7 @@ function App() {
   };
 
   const handleSubmitQuery = async () => {
+    event.preventDefault();
     if (!userQuery.trim()) return;
 
     setIsLoading(true);
@@ -59,7 +59,7 @@ function App() {
             Provide a complex topic, and AI agent will autonomously decompose it, conduct research, and forge a structured thesis for you.
           </p>
 
-          <form>
+          <form onSubmit={handleSubmitQuery}>
             <div className="field">
               <label className="label" htmlFor="topic">
                 I want to research…
@@ -78,8 +78,7 @@ function App() {
             <button
               className="submit"
               type="submit"
-              onClick={handleSubmitQuery}
-              disabled={isLoading}
+              disabled={isLoading || !userQuery.trim()}
             >
               {isLoading ? 'Researching...' : 'Start Research'}
             </button>
@@ -89,35 +88,22 @@ function App() {
         {/* Right: The results panel */}
         <aside className="media" aria-label="Research results">
           <div className="results-content">
-            {isForging && (
-              <div className="spinner-container">
-                <div className="spinner"></div>
-                <p>Agent is thinking...</p>
-              </div>
-            )}
-            {result && (
-                <div className="result-text">
-                    <h2>Research Synthesis</h2>
-                    <p>{result}</p>
+            {isLoading ? (
+                <div className="spinner-container">
+                  <BarLoader />
                 </div>
-            )}
-            {!isForging && !result && (
-                 <div className="placeholder-text">
-                    <h2>Your results will appear here</h2>
-                    <p>Fill in the field on the left, the agent's findings will be displayed in this panel.</p>
-                 </div>
-            )}
-            {(aiResponse || isLoading) && (
-              <div className="max-w-xl mx-auto mt-6 p-6 bg-white rounded-2xl shadow-lg">
-                <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">AI Response</h2>
-                {isLoading && !aiResponse && <p className="text-gray-700 text-center">AI is thinking...</p>}
-                  {aiResponse && (
-                    <div className="prose max-w-none">
-                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                        {aiResponse}
-                      </ReactMarkdown>
-                    </div>
-                  )}
+            ) : aiResponse ? (
+              <div className="ai-response-container">
+                <div className="prose max-w-none">
+                   <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                     {aiResponse}
+                   </ReactMarkdown>
+                </div>
+              </div>
+            ) : (
+              <div className="placeholder-text">
+                <h2>Your results will appear here</h2>
+                <p>Fill in the field on the left, the agent's findings will be displayed in this panel.</p>
               </div>
             )}
           </div>
