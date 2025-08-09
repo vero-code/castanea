@@ -1,5 +1,16 @@
 # Castanea
 
+![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Google ADK](https://img.shields.io/badge/Google%20ADK-4285F4?style=for-the-badge&logo=google&logoColor=white)
+![Perplexity API](https://img.shields.io/badge/Perplexity-000000?style=for-the-badge&logo=perplexity&logoColor=white)
+
+> **Three smart AI agents that find, analyze, and create — so you can focus on what matters.**
+
+Castanea is an AI-powered multi-agent platform for students and researchers. It automates time-consuming academic tasks by combining **real-time search**, **text analysis**, and **content generation** in one place. 
+
+Built with the power of **Google ADK** and **Perplexity API**, it features three specialized AI agents coordinated to deliver accurate, well-structured, and useful results. Created for [PANDA Hacks 2025 🐼🚀](https://devpost.com/software/castanea)
+
 ## Features
 
 Castanea operates through a team of specialized AI agents, each designed for a specific academic task:
