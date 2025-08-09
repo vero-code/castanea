@@ -1,7 +1,7 @@
 # backend/sub_agents.py
 from google.adk.agents import Agent
 from .config import MODEL_GEMINI_PRO, MODEL_GEMINI_FLASH
-from .tools import perplexity_search
+from .tools import perplexity_search, save_report
 
 # --- Sub-Agent Definitions ---
 
@@ -43,6 +43,7 @@ writer_agent = Agent(
                 "type of document (e.g., essay, letter, summary). Your task is to write that document from "
                 "scratch, adhering to the user's requirements for tone, style, and content. Return only the "
                 "finished written piece.",
+    tools=[save_report],
 )
 
 sub_agents_list = [

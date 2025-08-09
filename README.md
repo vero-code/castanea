@@ -14,7 +14,7 @@ Castanea operates through a team of specialized AI agents, each designed for a s
     
 -   ### ✍️ WriterAgent
     
-    Acts as a versatile writing assistant. It can generate original content like essays, reports, and formal emails based on a user's prompt.
+    Acts as a versatile writing assistant. It can generate original content like essays, reports, and formal emails based on a user's prompt. Additionally, it is equipped with a tool to save its output directly to a file (e.g., social_media_essay.txt), making it easy to store and edit the work.
 
 ## Technologies
 
@@ -81,9 +81,14 @@ than the monolingual cohort, suggesting that the constant cognitive effort of ma
 builds cognitive reserve, thereby providing a protective effect against neurodegeneration.
 ```
 
-### WriterAgent  
+### Test for WriterAgent  
+
+Writing an argumentative essay is not just text generation, but a demonstration of the ability to build a logical structure (thesis, arguments, conclusion). 
+Using the save_report tool here is absolutely logical - the student will want to save his work.
+
 ```
-Write a short, three-paragraph essay on the importance of bees for the ecosystem.
+Write a 5-paragraph argumentative essay on whether social media has a net positive or negative impact on teenage mental health.
+Save the output to 'social_media_essay.txt'.
 ```
 
 ## 📜 License

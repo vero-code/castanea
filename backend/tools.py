@@ -59,3 +59,33 @@ def perplexity_search(query: str) -> str:
         error_msg = f"An error occurred during the Perplexity API call: {e}"
         logging.error(error_msg)
         return error_msg
+
+def save_report(filename: str, content: str) -> str:
+    """
+    Saves the provided content to a text file in a 'reports' directory.
+    This tool can be used by the WriterAgent.
+
+    Args:
+        filename: The name of the file (e.g., 'climate_change_essay.txt').
+        content: The text content to save.
+
+    Returns:
+        A confirmation message.
+    """
+    logging.info(f"--- Tool: save_report called for filename: '{filename}' ---")
+    try:
+        # Create a 'reports' directory if it doesn't exist
+        if not os.path.exists('reports'):
+            os.makedirs('reports')
+
+        filepath = os.path.join('reports', filename)
+        with open(filepath, 'w', encoding='utf-8') as f:
+            f.write(content)
+
+        success_msg = f"Successfully saved the report to '{filepath}'."
+        logging.info(success_msg)
+        return success_msg
+    except Exception as e:
+        error_msg = f"Failed to save the file: {e}"
+        logging.error(error_msg)
+        return error_msg
