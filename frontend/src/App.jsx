@@ -1,25 +1,49 @@
 import { useState } from 'react';
 import './App.css';
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 function App() {
-  const [topic, setTopic] = useState("");
   const [isForging, setIsForging] = useState(false);
   const [result, setResult] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [userQuery, setUserQuery] = useState('');
+  const [aiResponse, setAiResponse] = useState('');
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!topic.trim()) {
-      alert("Please enter a topic to research.");
-      return;
+  const VITE_REACT_APP_BACKEND_URL = import.meta.env.VITE_REACT_APP_BACKEND_URL;
+
+  const handleQueryChange = (event) => {
+    setUserQuery(event.target.value);
+  };
+
+  const handleSubmitQuery = async () => {
+    if (!userQuery.trim()) return;
+
+    setIsLoading(true);
+    setAiResponse("");
+
+    try {
+      const response = await fetch(VITE_REACT_APP_BACKEND_URL + '/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ query: userQuery }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setAiResponse(data.response);
+      setUserQuery('');
+    } catch (error) {
+      console.error("Error sending query to backend:", error);
+      setAiResponse("Error: Could not get response from AI. Please try again later.");
+    } finally {
+      setIsLoading(false);
     }
-    console.log("Starting research for topic:", topic);
-    setIsForging(true);
-    setResult("");
-
-    setTimeout(() => {
-      setResult(`Here are the synthesized findings for "${topic}". The agent has analyzed multiple sources to provide a comprehensive overview...`);
-      setIsForging(false);
-    }, 2500);
   };
 
   return (
@@ -35,7 +59,7 @@ function App() {
             Provide a complex topic, and AI agent will autonomously decompose it, conduct research, and forge a structured thesis for you.
           </p>
 
-          <form onSubmit={handleSubmit}>
+          <form>
             <div className="field">
               <label className="label" htmlFor="topic">
                 I want to research…
@@ -45,14 +69,19 @@ function App() {
                 id="topic"
                 name="topic"
                 placeholder="For example: 'The impact of quantum computing on modern cryptography'"
-                value={topic}
-                onChange={(e) => setTopic(e.target.value)}
+                value={userQuery}
+                onChange={handleQueryChange}
                 required
               />
             </div>
 
-            <button className="submit" type="submit" disabled={isForging}>
-              {isForging ? 'Researching...' : 'Start Research'}
+            <button
+              className="submit"
+              type="submit"
+              onClick={handleSubmitQuery}
+              disabled={isLoading}
+            >
+              {isLoading ? 'Researching...' : 'Start Research'}
             </button>
           </form>
         </section>
@@ -75,8 +104,21 @@ function App() {
             {!isForging && !result && (
                  <div className="placeholder-text">
                     <h2>Your results will appear here</h2>
-                    <p>Once you submit a topic, the agent's findings will be displayed in this panel.</p>
+                    <p>Fill in the field on the left, the agent's findings will be displayed in this panel.</p>
                  </div>
+            )}
+            {(aiResponse || isLoading) && (
+              <div className="max-w-xl mx-auto mt-6 p-6 bg-white rounded-2xl shadow-lg">
+                <h2 className="text-2xl font-bold text-gray-800 mb-4 text-center">AI Response</h2>
+                {isLoading && !aiResponse && <p className="text-gray-700 text-center">AI is thinking...</p>}
+                  {aiResponse && (
+                    <div className="prose max-w-none">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {aiResponse}
+                      </ReactMarkdown>
+                    </div>
+                  )}
+              </div>
             )}
           </div>
         </aside>
